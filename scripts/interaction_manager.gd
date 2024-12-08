@@ -1,11 +1,11 @@
 extends Node
 class_name InteracationManager
 
-@onready var player: Node3D = get_tree().get_first_node_in_group("Player")
+@onready var player: Player = get_tree().get_first_node_in_group("Player")
 @onready var label: Label = %Label
 
 var interactables: Array[Interactable] = []
-var canInteract: bool
+var canInteract: bool = true
 
 func register_interactable(interactable: Interactable):
 	interactables.push_back(interactable)
@@ -29,12 +29,12 @@ func _process(delta: float) -> void:
 	else:
 		label.hide()
 	
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if interactables.size() > 0 && event.is_action_pressed("interact") && canInteract:
 		canInteract = false
 		label.hide()
 		
-		await interactables[0].interact.call()
+		await interactables[0].interact.call(player)
 		
 		canInteract = true
 		

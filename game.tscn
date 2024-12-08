@@ -1,9 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://8eoo8npotfc7"]
+[gd_scene load_steps=14 format=3 uid="uid://8eoo8npotfc7"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_w5cw2"]
 [ext_resource type="PackedScene" uid="uid://b350ifbnkvdxb" path="res://scenes/player.tscn" id="2_52lpq"]
+[ext_resource type="Script" path="res://building.gd" id="2_a18vh"]
+[ext_resource type="Script" path="res://box.gd" id="2_d6qwt"]
 [ext_resource type="PackedScene" uid="uid://dbud6wvw5504i" path="res://scenes/interactable.tscn" id="2_poij8"]
 [ext_resource type="PackedScene" uid="uid://b6yy3es7p1ln5" path="res://scenes/interacation_manager.tscn" id="4_i16dk"]
+[ext_resource type="PackedScene" uid="uid://bjb2ehqfs5l43" path="res://scenes/adam.tscn" id="7_krlaf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lqhjp"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -18,8 +21,13 @@ sky = SubResource("Sky_0s4cd")
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_7ye7m"]
+size = Vector3(7.18176, 5.4364, 10.1082)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_gf6vn"]
 size = Vector3(2.19141, 1, 2.39905)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nshok"]
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_w5cw2")
@@ -42,6 +50,18 @@ size = Vector3(100, 1, 100)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.98208, 2.33207, -0.719116)
 use_collision = true
 size = Vector3(4.0708, 4.7865, 6.31665)
+script = ExtResource("2_a18vh")
+
+[node name="BuildingInteractable" parent="Environments/Building" instance=ExtResource("2_poij8")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2235, -2.33207, 0.719116)
+collision_layer = 0
+collision_mask = 2
+display_text = "Building"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environments/Building/BuildingInteractable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1493, 2.67006, -0.603394)
+shape = SubResource("BoxShape3D_7ye7m")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Environments"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.08496, 0.4, 0)
@@ -51,18 +71,27 @@ use_collision = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.08496, 1.03617, 0)
 use_collision = true
 size = Vector3(0.2, 0.2, 0.2)
+script = ExtResource("2_d6qwt")
 
 [node name="Interactable" parent="Environments/CSGBox3D2" instance=ExtResource("2_poij8")]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00804234, -0.116619, 0)
 collision_layer = 0
 collision_mask = 2
-display_text = "[E] to interact"
+display_text = "Box"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environments/CSGBox3D2/Interactable"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.251953, 0, -0.0612183)
 shape = SubResource("BoxShape3D_gf6vn")
 
+[node name="AnotherBox" type="MeshInstance3D" parent="Environments"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.29822, 0.330779, -4.05711)
+mesh = SubResource("BoxMesh_nshok")
+
 [node name="player" parent="." groups=["Player"] instance=ExtResource("2_52lpq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.388978, 0.923692, 2.42022)
 
 [node name="InteracationManager" parent="." instance=ExtResource("4_i16dk")]
+
+[node name="Adam" parent="." instance=ExtResource("7_krlaf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.920239, 0.803551, -3.9269)
